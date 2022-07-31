@@ -13,9 +13,8 @@ class SourceLogger {
         $this->target_dir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'target';
         $this->log_dir  = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'log';
         $this->execution_file = 'execution.log';
-
         /**
-         * Terminate script if source dir not exits AND create log and target directories
+         * create log, source and target directories
          */
         $this->checkMainDirectoriesExists();
     }
@@ -51,7 +50,7 @@ class SourceLogger {
      */
     public function logState() {
         /**
-         * Terminate script if source dir not exits AND create log and target directories
+         * create log, source and target directories
          */
         $this->checkMainDirectoriesExists();
 
@@ -260,25 +259,22 @@ class SourceLogger {
     private function checkMainDirectoriesExists()
     {
         /**
-         * Terminate script if source dir not exits
-         */
-        if (!file_exists($this->source_dir)) {
-            throw new Exception('SOURCE DIRECTORY DOES NOT EXISTS');
-        }
-        /**
          * Creating (if not exists) main directories
          */
-        if (!file_exists($this->log_dir)) {
-            mkdir($this->log_dir);
+        if (!file_exists($this->getLogDir())) {
+            mkdir($this->getLogDir());
         }
-        if (!file_exists($this->log_dir . DIRECTORY_SEPARATOR . 'source')) {
-            mkdir($this->log_dir . DIRECTORY_SEPARATOR . 'source');
+        if (!file_exists($this->getLogDir() . DIRECTORY_SEPARATOR . 'source')) {
+            mkdir($this->getLogDir() . DIRECTORY_SEPARATOR . 'source');
         }
-        if (!file_exists($this->log_dir . DIRECTORY_SEPARATOR . 'target')) {
-            mkdir($this->log_dir . DIRECTORY_SEPARATOR . 'target');
+        if (!file_exists($this->getLogDir() . DIRECTORY_SEPARATOR . 'target')) {
+            mkdir($this->getLogDir() . DIRECTORY_SEPARATOR . 'target');
         }
-        if (!file_exists($this->target_dir)) {
-            mkdir($this->target_dir);
+        if (!file_exists($this->getSourceDir())) {
+            mkdir($this->getSourceDir());
+        }
+        if (!file_exists($this->getTargetDir())) {
+            mkdir($this->getTargetDir());
         }
     }
 }

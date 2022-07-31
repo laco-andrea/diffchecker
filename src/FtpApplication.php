@@ -58,17 +58,22 @@ class FtpApplication
      * @param SourceLogger $sourceLogger
      * @param $directories
      * @param $force_refresh
+     * @param $is_target
      * @return bool
      * @throws Exception
      */
-    public function downloadResources($sourceLogger, $directories, $force_refresh): bool
+    public function downloadResources($sourceLogger, $directories, $force_refresh, $is_target): bool
     {
         //CONNECTING TO FTP
         $this->connect();
         //REMOVING TARGET DIRECTORIES IF EXIST AND FLAG IS TRUE
         if ($force_refresh) {
             foreach ($directories as $directory) {
-                chdir($sourceLogger->getTargetDir());
+                if ($is_target) {
+                    chdir($sourceLogger->getTargetDir());
+                } else {
+                    chdir($sourceLogger->getSourceDir());
+                }
                 if (file_exists($directory) && is_dir($directory)) {
                     $sourceLogger->deleteDir($directory);
                 }
@@ -76,7 +81,11 @@ class FtpApplication
         }
         //COPYING TARGET DIRECTORIES
         foreach ($directories as $directory) {
-            chdir($sourceLogger->getTargetDir());
+            if ($is_target) {
+                chdir($sourceLogger->getTargetDir());
+            } else {
+                chdir($sourceLogger->getSourceDir());
+            }
             $this->ftpCopyDir($directory, $sourceLogger);
         }
         //CLOSING FTP CONNECTION
